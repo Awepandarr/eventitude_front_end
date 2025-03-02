@@ -128,7 +128,7 @@ export default {
       const event_id = localStorage.getItem('eventId')
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .post(`http://localhost:3333/event/${event_id}/question`, addQuestion) //Adding the queston
+        .post(`https://eventitude-backend-1.onrender.com/event/${event_id}/question`, addQuestion) //Adding the queston
         .then((response) => {
           localStorage.setItem('isLoggedIn', isLoggedIn.value)
           alert('Successfully question posted. \n Question Id:' + response.data.question_id)
@@ -142,7 +142,7 @@ export default {
       const event_id = localStorage.getItem('eventId')
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .post(`http://localhost:3333/event/${event_id}`)
+        .post(`https://eventitude-backend-1.onrender.com/event/${event_id}`)
         .then((response) => {
           alert(response.data)
           location.reload() //Register for event
@@ -154,7 +154,7 @@ export default {
     upvote(question_id) {
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .post(`http://localhost:3333/question/${question_id}/vote`) //Upvote
+        .post(`https://eventitude-backend-1.onrender.com/question/${question_id}/vote`) //Upvote
         .then((response) => {
           alert(response.data)
           location.reload()
@@ -166,7 +166,7 @@ export default {
     downvote(question_id) {
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .delete(`http://localhost:3333/question/${question_id}/vote`) //Downvote
+        .delete(`https://eventitude-backend-1.onrender.com/question/${question_id}/vote`) //Downvote
         .then((response) => {
           alert(response.data)
           location.reload()
@@ -179,7 +179,7 @@ export default {
     deletequestion(question_id) {
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .delete(`http://localhost:3333/question/${question_id}`)
+        .delete(`https://eventitude-backend-1.onrender.com/question/${question_id}`)
         .then((response) => {
           alert(response.data)
           location.reload()
@@ -195,7 +195,7 @@ export default {
       const eventid = localStorage.getItem('eventId')
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .get(`http://localhost:3333/event/${eventid}`)
+        .get(`https://eventitude-backend-1.onrender.com/event/${eventid}`)
         .then((response) => {
           this.eventDetails = response.data
           this.creatorDetails = response.data.creator
@@ -212,7 +212,7 @@ export default {
       const eventid = localStorage.getItem('eventId')
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .delete(`http://localhost:3333/event/${eventid}`)
+        .delete(`https://eventitude-backend-1.onrender.com/event/${eventid}`)
         .then((response) => {
           alert(response.data)
         })
