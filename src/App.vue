@@ -32,7 +32,7 @@ function largeFont() {
 function logout() {
   axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
   axios
-    .post('http://localhost:3333/logout', {})
+    .post('https://eventitude-backend-1.onrender.com/logout', {})
     .then((response) => {
       alert(response.data.message)
       isLoggedIn.value = false
