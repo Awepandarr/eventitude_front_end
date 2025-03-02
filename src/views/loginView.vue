@@ -67,7 +67,7 @@ export default {
       }
       //Post request to login
       axios
-        .post('http://localhost:3333/login', loginInfo)
+        .post('https://eventitude-backend-1.onrender.com/login', loginInfo)
         .then((response) => {
           localStorage.setItem('isLoggedIn', isLoggedIn.value)
           alert('Login Successfully.\n UserId:' + response.data.user_id)
