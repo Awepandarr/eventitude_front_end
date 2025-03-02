@@ -138,19 +138,36 @@ export default {
           alert(error.response.data.error_message)
         })
     },
-    registerEvent() {
-      const event_id = localStorage.getItem('eventId')
-      axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
-      axios
-        .post(`https://eventitude-backend-1.onrender.com/event/${event_id}`)
-        .then((response) => {
-          alert(response.data)
-          location.reload() //Register for event
-        })
-        .catch((error) => {
-          alert(error.response.data.error_message) //Show the error message
-        })
-    },
+registerEvent() {
+  const event_id = localStorage.getItem('eventId');
+  const token = localStorage.getItem('token');
+
+  if (!event_id) {
+    alert("No event selected!");
+    return;
+  }
+
+  if (!token) {
+    alert("You need to be logged in!");
+    return;
+  }
+
+  axios
+    .post(`https://eventitude-backend-1.onrender.com/event/${event_id}`, {}, {
+      headers: {
+        'X-Authorization': token, // Ensure header is correctly set
+        'Content-Type': 'application/json' // Sometimes required
+      }
+    })
+    .then((response) => {
+      alert("Successfully registered for the event!");
+      location.reload();
+    })
+    .catch((error) => {
+      alert(error.response?.data?.error_message || "Something went wrong!");
+    });
+}
+,
     upvote(question_id) {
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
