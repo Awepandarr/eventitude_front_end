@@ -107,6 +107,7 @@
 <script>
 import axios from 'axios'
 import { isLoggedIn } from '../auth'
+
 export default {
   data() {
     return {
@@ -116,147 +117,145 @@ export default {
       questionAsked: '',
     }
   },
+
   mounted() {
-    this.login()
-    this.getDetails()
+    this.login();
+    this.getDetails();
   },
+
   methods: {
-    submitQuestion() {
-      const addQuestion = {
-        question: this.questionAsked,
+    async submitQuestion() {
+      const event_id = localStorage.getItem('eventId');
+      const token = localStorage.getItem('token');
+
+      if (!event_id) return alert("No event selected!");
+      if (!token) return alert("You need to be logged in!");
+
+      try {
+        const response = await axios.post(
+          `https://eventitude-backend-1.onrender.com/event/${event_id}/question`,
+          { question: this.questionAsked },
+          { headers: { 'X-Authorization': token, 'Content-Type': 'application/json' } }
+        );
+        alert(`Successfully posted question! \nQuestion ID: ${response.data.question_id}`);
+        location.reload();
+      } catch (error) {
+        alert(error.response?.data?.error_message || "Something went wrong!");
       }
-      const event_id = localStorage.getItem('eventId')
-      axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
-      axios
-        .post(`https://eventitude-backend-1.onrender.com/event/${event_id}/question`, addQuestion) //Adding the queston
-        .then((response) => {
-          localStorage.setItem('isLoggedIn', isLoggedIn.value)
-          alert('Successfully question posted. \n Question Id:' + response.data.question_id)
-          location.reload() //it reloads to show the question and refresh
-        })
-        .catch((error) => {
-          alert(error.response.data.error_message)
-        })
     },
-registerEvent() {
-  const event_id = localStorage.getItem('eventId');
-  const token = localStorage.getItem('token');
 
-  if (!event_id) {
-    alert("No event selected!");
-    return;
-  }
+    async registerEvent() {
+      const event_id = localStorage.getItem('eventId');
+      const token = localStorage.getItem('token');
 
-  if (!token) {
-    alert("You need to be logged in!");
-    return;
-  }
+      if (!event_id) return alert("No event selected!");
+      if (!token) return alert("You need to be logged in!");
 
-  axios
-    .post(`https://eventitude-backend-1.onrender.com/event/${event_id}`, {}, {
-      headers: {
-        'X-Authorization': token, // Ensure header is correctly set
-        'Content-Type': 'application/json' // Sometimes required
+      try {
+        await axios.post(
+          `https://eventitude-backend-1.onrender.com/event/${event_id}`,
+          {},
+          { headers: { 'X-Authorization': token, 'Content-Type': 'application/json' } }
+        );
+        alert("Successfully registered for the event!");
+        location.reload();
+      } catch (error) {
+        alert(error.response?.data?.error_message || "Something went wrong!");
       }
-    })
-    .then((response) => {
-      alert("Successfully registered for the event!");
-      location.reload();
-    })
-    .catch((error) => {
-      alert(error.response?.data?.error_message || "Something went wrong!");
-    });
-}
-,
+    },
+
+    async vote(question_id, type) {
+      const token = localStorage.getItem('token');
+      if (!token) return alert("You need to be logged in!");
+
+      try {
+        const url = `https://eventitude-backend-1.onrender.com/question/${question_id}/vote`;
+        if (type === "upvote") {
+          await axios.post(url, {}, { headers: { 'X-Authorization': token } });
+        } else {
+          await axios.delete(url, { headers: { 'X-Authorization': token } });
+        }
+        alert(`${type === "upvote" ? "Upvoted" : "Downvoted"} successfully!`);
+        location.reload();
+      } catch (error) {
+        alert(error.response?.data?.error_message || "Something went wrong!");
+      }
+    },
+
     upvote(question_id) {
-      axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
-      axios
-        .post(`https://eventitude-backend-1.onrender.com/question/${question_id}/vote`) //Upvote
-        .then((response) => {
-          alert(response.data)
-          location.reload()
-        })
-        .catch((error) => {
-          alert(error.response.data.error_message)
-        })
-    },
-    downvote(question_id) {
-      axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
-      axios
-        .delete(`https://eventitude-backend-1.onrender.com/question/${question_id}/vote`) //Downvote
-        .then((response) => {
-          alert(response.data)
-          location.reload()
-        })
-        .catch((error) => {
-          alert(error.response.data.error_message)
-        })
-    },
-    //Delete question also reloads
-    deletequestion(question_id) {
-      axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
-      axios
-        .delete(`https://eventitude-backend-1.onrender.com/question/${question_id}`)
-        .then((response) => {
-          alert(response.data)
-          location.reload()
-        })
-        .catch((error) => {
-          alert(error.response.data.error_message)
-        })
+      this.vote(question_id, "upvote");
     },
 
-    getDetails() {
-      //get details on the event id
-      this.login()
-      const eventid = localStorage.getItem('eventId')
-      axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
-      axios
-        .get(`https://eventitude-backend-1.onrender.com/event/${eventid}`)
-        .then((response) => {
-          this.eventDetails = response.data
-          this.creatorDetails = response.data.creator
-          this.creator_id = response.data.creator.creator_id
-          console.log(this.creator_id)
-        })
-        .catch((error) => {
-          alert(error.response.data.error_message)
-        })
+    downvote(question_id) {
+      this.vote(question_id, "downvote");
     },
-    deleteEvent() {
-      //archive event
-      this.login()
-      const eventid = localStorage.getItem('eventId')
-      axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
-      axios
-        .delete(`https://eventitude-backend-1.onrender.com/event/${eventid}`)
-        .then((response) => {
-          alert(response.data)
-        })
-        .catch((error) => {
-          alert(error.response.data.error_message)
-        })
-    },
-    visibleFeatures() {
-      //If the user is the creator of the eevent
-      const user_id = localStorage.getItem('userId')
-      const creatorId = this.creator_id
-      if (user_id === String(creatorId)) {
-        localStorage.setItem('features', true)
-        return true
-      } else {
-        localStorage.setItem('features', false)
-        return false
+
+    async deleteQuestion(question_id) {
+      const token = localStorage.getItem('token');
+      if (!token) return alert("You need to be logged in!");
+
+      try {
+        await axios.delete(`https://eventitude-backend-1.onrender.com/question/${question_id}`, {
+          headers: { 'X-Authorization': token },
+        });
+        alert("Question deleted successfully!");
+        location.reload();
+      } catch (error) {
+        alert(error.response?.data?.error_message || "Something went wrong!");
       }
-    }, //Converts the time to local date and time
-    covertUnix(unix) {
-      const date = new Date(unix * 1000)
-      return date.toString()
     },
+
+    async getDetails() {
+      const event_id = localStorage.getItem('eventId');
+      const token = localStorage.getItem('token');
+
+      if (!event_id) return alert("No event selected!");
+      if (!token) return alert("You need to be logged in!");
+
+      try {
+        const response = await axios.get(`https://eventitude-backend-1.onrender.com/event/${event_id}`, {
+          headers: { 'X-Authorization': token },
+        });
+        this.eventDetails = response.data;
+        this.creatorDetails = response.data.creator;
+        this.creator_id = response.data.creator.creator_id;
+      } catch (error) {
+        alert(error.response?.data?.error_message || "Something went wrong!");
+      }
+    },
+
+    async deleteEvent() {
+      const event_id = localStorage.getItem('eventId');
+      const token = localStorage.getItem('token');
+
+      if (!event_id) return alert("No event selected!");
+      if (!token) return alert("You need to be logged in!");
+
+      try {
+        await axios.delete(`https://eventitude-backend-1.onrender.com/event/${event_id}`, {
+          headers: { 'X-Authorization': token },
+        });
+        alert("Event deleted successfully!");
+      } catch (error) {
+        alert(error.response?.data?.error_message || "Something went wrong!");
+      }
+    },
+
+    visibleFeatures() {
+      const user_id = localStorage.getItem('userId');
+      const creatorId = this.creator_id;
+      const isCreator = user_id === String(creatorId);
+      localStorage.setItem('features', isCreator);
+      return isCreator;
+    },
+
+    covertUnix(unix) {
+      return new Date(unix * 1000).toString();
+    },
+
     login() {
-      //Login value should be true
-      isLoggedIn.value = true
-      localStorage.setItem('isLoggedIn', isLoggedIn.value)
+      isLoggedIn.value = true;
+      localStorage.setItem('isLoggedIn', true);
     },
   },
 }
