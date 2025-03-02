@@ -93,13 +93,12 @@
           </div>
           <div v-if="visible()" class="flex justify-center mt-2">
             <!--It is visible if Loggin is true -->
-            <button
-              class="textSize rounded-full p-2 bg-[#9400f6] hover:bg-[#f49c06] hover:text-black"
-              aria-label="Get Details"
-              @click="getEventId(event.event_id)"
-            >
-              <a href="/events/:id"> Get details</a>
-            </button>
+<router-link :to="`/events/${event.event_id}`">
+  <button class="textSize rounded-full p-2 bg-[#9400f6] hover:bg-[#f49c06] hover:text-black">
+    Get details
+  </button>
+</router-link>
+
           </div>
         </li>
       </ul>
