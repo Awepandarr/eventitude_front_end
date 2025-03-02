@@ -231,7 +231,7 @@ export default {
       //Authorization to authenticated
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .post(`http://localhost:3333/event/${eventId}/category`, category)
+        .post(`https://eventitude-backend-1.onrender.com/event/${eventId}/category`, category)
         .then((response) => {
           alert(response.data.message) //sends the response
           isLoggedIn.value = true //puts the loggedIn true
