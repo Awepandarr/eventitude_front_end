@@ -93,11 +93,14 @@
           </div>
           <div v-if="visible()" class="flex justify-center mt-2">
             <!--It is visible if Loggin is true -->
-<router-link :to="`/events/${event.event_id}`">
-  <button class="textSize rounded-full p-2 bg-[#9400f6] hover:bg-[#f49c06] hover:text-black">
-    Get details
-  </button>
-</router-link>
+            <button
+  class="textSize rounded-full p-2 bg-[#9400f6] hover:bg-[#f49c06] hover:text-black"
+  aria-label="Get Details"
+  @click="goToEvent(event.event_id)"
+>
+  Get details
+</button>
+
 
           </div>
         </li>
@@ -185,6 +188,9 @@ export default {
     this.typeWriter()
   },
   methods: {
+    goToEvent(eventId) {
+    this.$router.push(`/events/${eventId}`)
+  }
     //(https://stackoverflow.com/questions/65477711/typewriter-effect-and-links)
     typeWriter() {
       if (this.charIndex < this.text[this.textIndex].length) {
