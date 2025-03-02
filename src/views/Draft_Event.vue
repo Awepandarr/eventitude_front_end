@@ -167,7 +167,7 @@ export default {
       }
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .post('http://localhost:3333/events', eventinfo)
+        .post('https://eventitude-backend-1.onrender.com/events', eventinfo)
         .then((response) => {
           //Creates the event and sets it and removeItem
           isLoggedIn.value = true
