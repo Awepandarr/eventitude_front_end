@@ -215,7 +215,7 @@ export default {
       }
       //params is passed to make it search
       axios
-        .get('http://localhost:3333/search', {
+        .get('https://eventitude-backend-1.onrender.com/search', {
           params: {
             q: this.searchQuery,
             category: this.category,
