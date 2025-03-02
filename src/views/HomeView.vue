@@ -86,9 +86,10 @@
           <p class="textSize">Maximum Attendees: {{ event.max_attendees }}</p>
           <div class="flex justify-center mt-2" v-if="!visible()">
             <!--It is visible if Loggin is false -->
-            <button class="textSize rounded-full p-2 bg-[#9400f6]">
-              <a href="/login" aria-label="Register">Register</a>
-            </button>
+<router-link to="/login">
+  <button class="textSize rounded-full p-2 bg-[#9400f6]">Register</button>
+</router-link>
+
           </div>
           <div v-if="visible()" class="flex justify-center mt-2">
             <!--It is visible if Loggin is true -->
