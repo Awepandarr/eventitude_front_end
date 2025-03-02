@@ -9,15 +9,16 @@
       >
         <h1 class="text-2xl flex justify-center"><b>Create Event</b></h1>
         <label for="eventName">Event Name </label><br />
-        <input
-          type="text"
-          id="eventName"
-          v-model="eventName"
-          :class="{
-            'border-2 border-red-500 rounded-lg': !eventName,
-            'border-2 border-black rounded-lg': eventName,
-          }"
-        /><br />
+<input
+  type="text"
+  id="eventName"
+  v-model="eventName"
+  :class="{
+    'border-2 border-red-500 rounded-lg': !eventName,
+    'border-2 border-black rounded-lg': eventName
+  }"
+/>
+<br />
         <label for="description">Description </label><br />
         <input
           type="text"
