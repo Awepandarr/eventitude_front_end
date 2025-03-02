@@ -78,15 +78,13 @@
           Continue
         </button>
         <!--In order to click and the handleSubmit should not effect drafit-->
-        <button
-          class="bg-purple-500 text-white rounded-full p-2 w-full"
-          @click="
-            draftit()
-            $event.preventDefault()
-          "
-        >
-          Draft
-        </button>
+<button
+  class="bg-purple-500 text-white rounded-full p-2 w-full"
+  @click="draftit(); $event.preventDefault()"
+>
+  Draft
+</button>
+
       </form>
     </div>
   </div>
