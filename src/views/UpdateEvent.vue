@@ -92,7 +92,7 @@ export default {
       const eventid = localStorage.getItem('eventId') //eventId gets from the local storage
       axios.defaults.headers['X-Authorization'] = localStorage.getItem('token')
       axios
-        .patch(`http://localhost:3333/event/${eventid}`, eventinfo)
+        .patch(`https://eventitude-backend-1.onrender.com/event/${eventid}`, eventinfo)
         .then((response) => {
           alert('Updated succesfully.\n Event name:' + String(response.data.name)) //Updated
           this.$router.push('/events/:id') //Goes to the getEventid
