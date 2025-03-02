@@ -80,7 +80,7 @@ export default {
         password: this.password,
       }
       axios
-        .post('http://localhost:3333/users', userinfo)
+        .post('https://eventitude-backend-1.onrender.com/users', userinfo)
         .then((response) => {
           alert('Account Created Successfully \n UserId:' + response.data.user_id)
           this.$router.push('/login') //Leads to loggin
